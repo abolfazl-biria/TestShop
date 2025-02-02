@@ -13,7 +13,7 @@ public class CustomerConfiguration : IEntityTypeConfiguration<CustomerEntity>
         builder.Property(x => x.Id).IsRequired().ValueGeneratedOnAdd();
 
         builder.Property(c => c.FullName).IsRequired().HasMaxLength(100);
-        builder.Property(c => c.PhoneNumber).IsRequired().HasMaxLength(15);
+        builder.Property(c => c.PhoneNumber).IsRequired().HasMaxLength(11);
 
         builder.HasQueryFilter(x => !x.IsRemoved);
     }

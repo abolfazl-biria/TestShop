@@ -8,8 +8,8 @@ public class DeleteProductCommandValidator : AbstractValidator<DeleteProductComm
     public DeleteProductCommandValidator()
     {
         RuleFor(x => x.Id)
-            .NotNull()
-            .GreaterThan(0)
-            .NotEmpty();
+            .NotNull().WithMessage("شناسه نمی‌تواند null باشد.")
+            .GreaterThan(0).WithMessage("شناسه باید بزرگتر از صفر باشد.")
+            .NotEmpty().WithMessage("شناسه الزامی است.");
     }
 }

@@ -7,6 +7,7 @@ public class OrderEntity : BaseEntity
 {
     public int CustomerId { get; set; }
     public OrderStatus Status { get; set; }
+    public decimal Amount { get; set; }
 
     #region Navigations
 

@@ -12,20 +12,32 @@ public class UpdateProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<Upda
 {
     public async Task<ResultDto> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await unitOfWork.Products.GetByIdAsync(request.Id)
-                      ?? throw new AppException(HttpStatusCode.BadRequest, "محصول یافت نشد");
+        await unitOfWork.BeginTransactionAsync();
+        try
+        {
+            //اعمال lock بر روی دیتا بیس 
+            //به جای استفاده از lock در سطح کد
+            var entity = await unitOfWork.Products.GetByIdForUpdateAsync(request.Id)
+                         ?? throw new AppException(HttpStatusCode.BadRequest, "یافت نشد");
 
-        var productExist = await unitOfWork.Products
-            .ExistsAsync(x => x.Name == request.Name && x.Id != product.Id);
+            var entityExist = await unitOfWork.Products
+                .ExistsAsync(x => x.Name == request.Name && x.Id != entity.Id);
 
-        if (productExist)
-            throw new AppException(HttpStatusCode.BadRequest, "محصول از قبل موجود میباشد");
+            if (entityExist)
+                throw new AppException(HttpStatusCode.BadRequest, "از قبل موجود میباشد");
 
-        product.Update(request);
+            entity.Update(request);
 
-        unitOfWork.Products.Update(product);
-        await unitOfWork.CommitAsync();
+            unitOfWork.Products.Update(entity);
 
-        return new ResultDto();
+            await unitOfWork.CommitAsync();
+
+            return new ResultDto();
+        }
+        catch (Exception e)
+        {
+            await unitOfWork.RollbackAsync();
+            throw;
+        }
     }
 }

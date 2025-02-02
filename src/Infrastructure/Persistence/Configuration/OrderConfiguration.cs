@@ -12,6 +12,8 @@ public class OrderConfiguration : IEntityTypeConfiguration<OrderEntity>
 
         builder.Property(x => x.Id).IsRequired().ValueGeneratedOnAdd();
 
+        builder.HasIndex(x => new { x.Status, x.CustomerId }).IsUnique().HasFilter($"{nameof(OrderEntity.IsRemoved)} = 0");
+
         builder.HasQueryFilter(x => !x.IsRemoved);
 
         #region Navigations

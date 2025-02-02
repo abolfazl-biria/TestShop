@@ -5,6 +5,12 @@ namespace Application.Interfaces;
 public interface IUnitOfWork : IDisposable
 {
     IProductRepository Products { get; }
+    IOrderRepository Orders { get; }
+    IOrderItemRepository OrderItems { get; }
+    ICustomerRepository Customers { get; }
 
-    Task<bool> CommitAsync();
+    Task BeginTransactionAsync();
+    Task CommitAsync();
+    Task RollbackAsync();
+    Task<bool> SaveChangesAsync();
 }

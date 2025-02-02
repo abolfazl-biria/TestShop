@@ -11,15 +11,26 @@ public class DeleteProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<Dele
 {
     public async Task<ResultDto> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await unitOfWork.Products.GetByIdAsync(request.Id)
-                      ?? throw new AppException(HttpStatusCode.BadRequest, "محصول یافت نشد");
+        await unitOfWork.BeginTransactionAsync();
 
-        product.ModifiedDate = DateTimeOffset.UtcNow;
-        product.IsRemoved = true;
+        try
+        {
+            var entity = await unitOfWork.Products.GetByIdAsync(request.Id)
+                         ?? throw new AppException(HttpStatusCode.BadRequest, "یافت نشد");
 
-        unitOfWork.Products.Update(product);
-        await unitOfWork.CommitAsync();
+            entity.ModifiedDate = DateTimeOffset.UtcNow;
+            entity.IsRemoved = true;
 
-        return new ResultDto();
+            unitOfWork.Products.Update(entity);
+
+            await unitOfWork.CommitAsync();
+
+            return new ResultDto();
+        }
+        catch (Exception e)
+        {
+            await unitOfWork.RollbackAsync();
+            throw;
+        }
     }
 }

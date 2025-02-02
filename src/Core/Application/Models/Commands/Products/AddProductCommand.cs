@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Models.Commands.Products;
 
-public class AddProductCommand : IRequest<ResultDto<string>>
+public class AddProductCommand : IRequest<ResultDto>
 {
     public string Name { get; set; } = null!;
 

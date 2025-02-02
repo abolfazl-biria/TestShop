@@ -20,6 +20,11 @@ public class ProductRepository : Repository<ProductEntity>, IProductRepository
     private IQueryable<ProductEntity> Query =>
         _queryable;
 
+    public async Task<ProductEntity?> GetByIdForUpdateAsync(int id) =>
+        await DbContext.Set<ProductEntity>()
+            .FromSqlRaw("SELECT * FROM ProductEntity WITH (UPDLOCK, ROWLOCK)  WHERE Id = {0}", id)
+            .SingleOrDefaultAsync();
+
     public async Task<ProductEntity?> GetByIdAsync(int id) =>
         await Query.SingleOrDefaultAsync(x => x.Id == id);
 

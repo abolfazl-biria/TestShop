@@ -16,14 +16,14 @@ public static class ProductHelper
             IsRemoved = false,
         };
 
-    public static ProductEntity Update(this ProductEntity product, UpdateProductCommand command)
+    public static ProductEntity Update(this ProductEntity entity, UpdateProductCommand command)
     {
-        product.Name = command.Name;
-        product.Price = command.Price;
-        product.StockQuantity = command.StockQuantity;
+        entity.Name = command.Name;
+        entity.Price = command.Price;
+        entity.StockQuantity = command.StockQuantity;
 
-        product.ModifiedDate = DateTimeOffset.UtcNow;
+        entity.ModifiedDate = DateTimeOffset.UtcNow;
 
-        return product;
+        return entity;
     }
 }

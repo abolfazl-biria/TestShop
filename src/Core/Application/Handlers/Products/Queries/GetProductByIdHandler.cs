@@ -14,7 +14,7 @@ public class GetProductByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<Get
     public async Task<ResultDto<ProductDto>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
     {
         var result = await unitOfWork.Products.GetByIdAsync(request.Id)
-                     ?? throw new AppException(HttpStatusCode.BadRequest, "محصول یافت نشد");
+                     ?? throw new AppException(HttpStatusCode.BadRequest, "یافت نشد");
 
         return new ResultDto<ProductDto>(result.MapToModel());
     }

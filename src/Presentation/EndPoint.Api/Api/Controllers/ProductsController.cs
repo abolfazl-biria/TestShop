@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EndPoint.Api.Api.Controllers;
 
-[ApiController, Route("api/[controller]}")]
+[ApiController, Route("api/[controller]")]
 public class ProductsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
@@ -43,7 +43,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
         }));
 
     [HttpPut("{eid}")]
-    public async Task<IActionResult> Add([FromRoute] string eid, [FromBody] UpdateProductRequestDto request) =>
+    public async Task<IActionResult> Update([FromRoute] string eid, [FromBody] UpdateProductRequestDto request) =>
         this.ReturnResponse(await mediator.Send(new UpdateProductCommand
         {
             Id = eid.Decode(),

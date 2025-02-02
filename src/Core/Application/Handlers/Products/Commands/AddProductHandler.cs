@@ -12,16 +12,16 @@ public class AddProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<AddProd
 {
     public async Task<ResultDto> Handle(AddProductCommand request, CancellationToken cancellationToken)
     {
-        var productExist = await unitOfWork.Products
+        var entityExist = await unitOfWork.Products
             .ExistsAsync(x => x.Name == request.Name);
 
-        if (productExist)
-            throw new AppException(HttpStatusCode.BadRequest, "محصول از قبل موجود میباشد");
+        if (entityExist)
+            throw new AppException(HttpStatusCode.BadRequest, "از قبل موجود میباشد");
 
-        var product = request.Create();
+        var entity = request.Create();
 
-        unitOfWork.Products.Add(product);
-        await unitOfWork.CommitAsync();
+        unitOfWork.Products.Add(entity);
+        await unitOfWork.SaveChangesAsync();
 
         return new ResultDto();
     }

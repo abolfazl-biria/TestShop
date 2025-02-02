@@ -17,5 +17,4 @@ public class OrderItemEntity : BaseEntity
     public ProductEntity Product { get; set; }
 
     #endregion
-    //public decimal TotalPrice => Quantity * UnitPrice;
 }
