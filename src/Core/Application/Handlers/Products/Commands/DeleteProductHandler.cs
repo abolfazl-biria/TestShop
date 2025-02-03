@@ -7,7 +7,7 @@ using System.Net;
 
 namespace Application.Handlers.Products.Commands;
 
-public class DeleteProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteProductCommand, ResultDto>
+public class DeleteProductHandle(IUnitOfWork unitOfWork) : IRequestHandler<DeleteProductCommand, ResultDto>
 {
     public async Task<ResultDto> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
